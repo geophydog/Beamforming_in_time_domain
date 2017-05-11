@@ -144,15 +144,21 @@ int main( int argc, char *argv[] ) {
                 shift_index = (int)(shifttime/delta);
                 if ( (shift_index+begin_index) >=0 && (shift_index+begin_index + beam_npts) < sac_npts ) {
                     for ( j = 0; j < beam_npts; j ++ ) {
-                        //printf("AMP_INDEX: %d  AMP: %f\n", (j+shift_index+begin_index, amp[i][j+begin_index+shift_index]));
                         sum[j] += amp[i][j+begin_index+shift_index]/count;
                     }
+                }
+                else if ( (shift_index+begin_index) < 0 ) {
+                    if ( (j+begin_index+shift_index) < 0 ) sum[j] = 0.;
+                    else sum[j] += amp[i][j+begin_index+shift_index];
+                }
+                else if ( (shift_index+begin_index+beam_npts) >= sac_npts ) {
+                    if( (shift_index+begin_index+j) >= sac_npts ) sum[j] = 0.;
+                    else sum[j] += amp[i][shift_index+begin_index+j];
                 }
                 else continue;
             }
             for ( j = 0; j < beam_npts; j ++ ) {
                 if ( peak < fabs(sum[i]) ) peak = fabs(sum[i]);
-                //printf("INDEX: %d  SUM: %f\n", j, sum[j]);
             }
             fprintf(fout,"%f %f %f %f %f %d\n", slow_scan, baz_scan, peak, dx, dy, shift_index);
             baz_scan += baz_step;
