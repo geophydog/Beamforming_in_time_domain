@@ -6,4 +6,4 @@ beamforming : $(objects)
 $(objects) : sacio.h
 
 clean :
-	rm -f $(objects)
+	rm -f beamforming $(objects)
