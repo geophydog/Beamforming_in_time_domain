@@ -223,7 +223,7 @@ int main( int argc, char *argv[] ) {
 	fprintf(fp,"PS=plot.ps\n"); fprintf(fp,"PDF=plot.pdf\n");
 	fprintf(fp,"awk '{print $1,$2,$3/%f}' %s > tmp.file\n", cof_peak, argv[10]);
 	fprintf(fp,"gmt surface tmp.file -R$R1 -I%f/%f -Gtmp.grd\n", baz_step/10., slow_step/5.);
-	fprintf(fp,"gmt makecpt -Cbwor.cpt -T0/1/0.1 -Z >tmp.cpt\n");
+	fprintf(fp,"gmt makecpt -Cjet -T0/1/0.1 -Z >tmp.cpt\n");
 	fprintf(fp,"gmt psxy -R$R2 -J$J -K -T>$PS\n");
 	fprintf(fp,"gmt grdimage tmp.grd -R -J -K -O -Ctmp.cpt -Bx30g15+l\"backazimuth(deg)\" -By%fg%f+l\"slowness(s/km)\" -BwsEN+t\"bandpass: %.3f ~ %.3f Hz)\" >>$PS\n", slow_high/5., slow_high/10., fre_low, fre_high);
 	while ( grid > 1e-6 ) {
@@ -232,9 +232,9 @@ int main( int argc, char *argv[] ) {
 	}
 	fprintf(fp,"gmt psscale -Ctmp.cpt -D7i/3i/12/0.8 -Ba0.1g0:\"Normalized cross-coeffient\": -K -O >>$PS\n");
 	fprintf(fp,"echo 0 %f E | gmt pstext -R -J -K -O -F+f15p,27,red -X1.9i>>$PS\n", slow_high/2.);
-	fprintf(fp,"echo 90 %f N | gmt pstext -R -J -K -O -F+f15p,27,red -X-1.9i -Y2i>>$PS\n", slow_high/2.);
-	fprintf(fp,"echo 180 %f W | gmt pstext -R -J -K -O -F+f15p,27,red -Y-1.9i -X-2i>>$PS\n", slow_high/2.);
-	fprintf(fp,"echo -90 %f S | gmt pstext -R -J -K -O -F+f15p,27,red -X1.9i -Y-2i>>$PS\n", slow_high/2.);
+	fprintf(fp,"echo 90 %f N | gmt pstext -R -J -K -O -F+f15p,27,red -X-1.9i -Y1.9i>>$PS\n", slow_high/2.);
+	fprintf(fp,"echo 180 %f W | gmt pstext -R -J -K -O -F+f15p,27,red -Y-1.9i -X-1.9i>>$PS\n", slow_high/2.);
+	fprintf(fp,"echo -90 %f S | gmt pstext -R -J -K -O -F+f15p,27,red -X1.9i -Y-1.9i>>$PS\n", slow_high/2.);
 	fprintf(fp,"gmt psxy -R -J -O -T>>$PS\n");
 	fprintf(fp,"ps2pdf $PS $PDF\n");
 	fprintf(fp,"rm gmt.* tmp.*\n");
