@@ -8,7 +8,7 @@
 +  slow_high:   high limitation scaning hirizontal slowness            +
 +  slow_step:   step length of scaning slowness                        +
 +  baz_tesp:    step length of scaning backazimuth                     +
-+  2017-5-11    Initial coding by Xuping Feng @ NJU                    +
++  2017-5-11    Initially coded by Xuping Feng @ NJU                   +
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
 #include <stdio.h>
@@ -19,7 +19,7 @@
 #include <time.h>
 #include "sacio.h"
 
-/*---------------------------------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------------------------------------------------------------------*/
 void no_spa(char *ps) {
     char *pt = ps;
     while ( *ps != '\0' ) {
@@ -31,7 +31,7 @@ void no_spa(char *ps) {
     *pt = '\0';
 }
 
-/*---------------------------------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------------------------------------------------------------------*/
 int near_pow2( int n ) {
     int m;
     float f;
@@ -40,18 +40,31 @@ int near_pow2( int n ) {
     return m;
 }
 
-/*---------------------------------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------------------------------------------------------------------*/
+float coef( float *data1, float *data2, int npts ) {
+    int i;
+    float cof, x_y = 0., x_sqa = 0., y_sqa = 0.;
+    for ( i = 0; i < npts; i ++ ) {
+        x_sqa += data1[i]*data1[i];
+        y_sqa += data2[i]*data2[i], x_y += data1[i]*data2[i];
+    }
+    cof = x_y / sqrt(x_sqa*y_sqa);
+    return cof;
+
+}
+
+/*----------------------------------------------------------------------------------------------------------------------------------------------------------*/
 #define pi 3.1415926  // The approximation value of PI
 #define g 111.195     // The value of transformation from degree to km in the Earth
 
 
-/*---------------------------------------------------------------------------------------------------*/
+/*-----------------------------------------------------------------------------------------------------------------------------------------------------------*/
 int main( int argc, char *argv[] ) {
-    float *data, slow_low, slow_high, slow_step, slow_scan, slow_x, slow_y, baz_scan, baz_step,\
+    float *data, slow_low, slow_high, slow_step, slow_scan, slow_x, slow_y, baz_scan, baz_step, grid, grid_step,\
         shifttime, center_lon = 0., center_lat = 0., center_ele = 0., fre_low, fre_high, t1, t2,\
-        delta, dx, dy, *sum, time_start, time_end, time_used, **coordi, **amp, peak, tmp = 0.;
-    int i, j, size = 256, count = 0, sac_npts, sta_index = 0, shift_index, begin_index, end_index, beam_npts;
-    char *ss;
+        delta, dx, dy, *sum, time_start, time_end, time_used, **coordi, **amp, cof = 0., **tmp, cof_peak = 0.;
+    int i, j, size = 256, count = 0, sac_npts, sta_index = 0, shift_index, begin_index, end_index, beam_npts, k = 0;
+    char *ss, ch[16];
     FILE *fin, *fout, *fp, *fbp;
     SACHEAD hd;
 
@@ -102,14 +115,16 @@ int main( int argc, char *argv[] ) {
 
     amp = (float**) malloc(sizeof(float*) * count);
     coordi = (float**) malloc(sizeof(float*) * count);
+    tmp = (float**) malloc(sizeof(float*) * count);
     for ( i = 0; i < count; i ++ ) {
         amp[i] = (float*) malloc(sizeof(float) * sac_npts);
         coordi[i] = (float*) malloc(sizeof(float) * 3);
+        tmp[i] = (float*) malloc(sizeof(float) * beam_npts);
     }
     sum = (float*) malloc(sizeof(float) * beam_npts);
 
 
-/*---------------------bandpass filter inputing seismic data and saving them in array "amp"----------------------*/
+/*---------------------call SAC(Seismic Analysis Code) to bandpass filter inputing seismic data and saving them in array "amp"----------------------*/
     fin = fopen(argv[1], "r");
     while ( fgets(ss, size, fin) ) {
         no_spa(ss);
@@ -122,6 +137,7 @@ int main( int argc, char *argv[] ) {
         fprintf(fbp,"END\n");
         fclose(fbp);
         system("sh bandpassfilter");
+        system("rm bandpassfilter");
         data = read_sac(ss,&hd);
         coordi[sta_index][0] = center_lon - hd.stlo; coordi[sta_index][1] = center_lat - hd.stla; coordi[sta_index][2] = center_ele - hd.stel;
         for ( i = 0; i < sac_npts; i ++ ) amp[sta_index][i] = data[i];
@@ -129,50 +145,110 @@ int main( int argc, char *argv[] ) {
     }
     free(data);fclose(fin);
 
-/*----------------------------------------scaning slowness and backazimuth-----------------------------------------*/
+/*-------------------------------------------------------------------scaning slowness and backazimuth------------------------------------------------*/
     slow_scan = slow_low;
 
     while ( slow_scan <= slow_high ) {
         baz_scan = -185;
         while( baz_scan <= 180 ) {
-            for ( i = 0; i < beam_npts; i++ ) sum[i] = 0.; peak = 0.; tmp = 0.;
+            for ( i = 0; i < beam_npts; i++ ) {
+                sum[i] = 0., cof = 0.;
+            }
+            for ( i = 0; i < count; i ++ )
+                for ( j = 0; j < beam_npts; j ++ )
+                    tmp[i][j] = 0.;
             for ( i = 0; i < count; i ++ ) {
                 slow_x = slow_scan*cos(baz_scan/180.*pi);
                 slow_y = slow_scan*sin(baz_scan/180.*pi);
-                dx = (center_lon - coordi[i][0])*g; dy = (center_lat - coordi[i][1])*g;
+                dx = (coordi[i][0] - center_lon)*g; dy = (coordi[i][1] - center_lat)*g;
                 shifttime = slow_x*dx + slow_y*dy;
                 shift_index = (int)(shifttime/delta);
-                if ( (shift_index+begin_index) >=0 && (shift_index+begin_index + beam_npts) < sac_npts ) {
+                if ( (shift_index+begin_index) >= 0 && (shift_index+begin_index + beam_npts) < sac_npts ) {
                     for ( j = 0; j < beam_npts; j ++ ) {
                         sum[j] += amp[i][j+begin_index+shift_index]/count;
+                        tmp[i][j] = amp[i][j+begin_index+shift_index];
                     }
                 }
                 else if ( (shift_index+begin_index) < 0 ) {
-                    if ( (j+begin_index+shift_index) < 0 ) sum[j] = 0.;
-                    else sum[j] += amp[i][j+begin_index+shift_index];
-                }
+					for (j = 0; j < beam_npts; j ++) {
+                    	if ( (j+begin_index+shift_index) < 0 ) {
+                        	sum[j] += 0.; tmp[i][j] = 0.;
+                    	}
+                    	else {
+                        sum[j] += amp[i][j+begin_index+shift_index];
+                        tmp[i][j] = amp[i][j+begin_index+shift_index];
+                    	}
+					}
+				}
                 else if ( (shift_index+begin_index+beam_npts) >= sac_npts ) {
-                    if( (shift_index+begin_index+j) >= sac_npts ) sum[j] = 0.;
-                    else sum[j] += amp[i][shift_index+begin_index+j];
-                }
+                    for ( j = 0; j < beam_npts; j ++ ) {
+						if( (shift_index+begin_index+j) >= sac_npts ) {
+                        	sum[j] += 0.; tmp[i][j] = 0.;
+                    	}
+                    	else  {
+                        	sum[j] += amp[i][shift_index+begin_index+j];
+                        	tmp[i][j] = amp[i][j+begin_index+shift_index];
+                    	}
+                	}
+				}
                 else continue;
             }
-            for ( j = 0; j < beam_npts; j ++ ) {
-                if ( peak < fabs(sum[i]) ) peak = fabs(sum[i]);
+            for ( i = 0; i < count; i ++ ) {
+                cof += coef(sum, tmp[i], beam_npts)/count;
             }
-            fprintf(fout,"%f %f %f %f %f %d\n", slow_scan, baz_scan, peak, dx, dy, shift_index);
+			if ( cof_peak < cof ) cof_peak = cof;
+            fprintf(fout,"%f %f %f\n", baz_scan, slow_scan, cof);
             baz_scan += baz_step;
         }
         slow_scan += slow_step;
     }
+
+/*-------------------------------------------------data virtialization shell script saved in file "plot.sh"-----------------------------------------------*/
+	grid = slow_high;
+	grid_step = grid/10.;
+	fprintf(fp,"gmt gmtset FONT_LABEL 15p,Times-Bold,black\n");
+	fprintf(fp,"gmt gmtset FONT_TITLE 20p,27,black\n");
+	fprintf(fp,"gmt gmtset MAP_TITLE_OFFSET 40p\n");
+	fprintf(fp,"gmt gmtset MAP_GRID_PEN_PRIMARY 0.1p,white\n");
+	fprintf(fp,"gmt gmtset MAP_GRID_PEN_SECONDARY 0.05p,white\n");
+	if ( slow_low >= 0.2*slow_high ) {
+		fprintf(fp,"R1=-185/180/%f/%f\n", slow_low, slow_high);
+		fprintf(fp,"R2=-180/180/%f/%f\n", slow_low, slow_high);
+	}
+	else {
+		fprintf(fp,"R1=-185/180/%f/%f\n", slow_high*0.2, slow_high);
+		fprintf(fp,"R2=-180/180/%f/%f\n", slow_high*0.2, slow_high);
+	}
+	fprintf(fp,"J=P6i\n");
+	fprintf(fp,"PS=plot.ps\n"); fprintf(fp,"PDF=plot.pdf\n");
+	fprintf(fp,"awk '{print $1,$2,$3/%f}' %s > tmp.file\n", cof_peak, argv[10]);
+	fprintf(fp,"gmt surface tmp.file -R$R1 -I%f/%f -Gtmp.grd\n", baz_step/10., slow_step/5.);
+	fprintf(fp,"gmt makecpt -Cbwor.cpt -T0/1/0.1 -Z >tmp.cpt\n");
+	fprintf(fp,"gmt psxy -R$R2 -J$J -K -T>$PS\n");
+	fprintf(fp,"gmt grdimage tmp.grd -R -J -K -O -Ctmp.cpt -Bx30g15+l\"backazimuth(deg)\" -By%fg%f+l\"slowness(s/km)\" -BwsEN+t\"bandpass: %.3f ~ %.3f Hz)\" >>$PS\n", slow_high/5., slow_high/10., fre_low, fre_high);
+	while ( grid > 1e-6 ) {
+		fprintf(fp,"echo 90 %.3f %.3f | gmt pstext -R -J -K -O -F+f10p>>$PS\n", grid, grid);
+		grid -= grid_step;
+	}
+	fprintf(fp,"gmt psscale -Ctmp.cpt -D7i/3i/12/0.8 -Ba0.1g0:\"Normalized cross-coeffient\": -K -O >>$PS\n");
+	fprintf(fp,"echo 0 %f E | gmt pstext -R -J -K -O -F+f15p,27,red -X1.9i>>$PS\n", slow_high/2.);
+	fprintf(fp,"echo 90 %f N | gmt pstext -R -J -K -O -F+f15p,27,red -X-1.9i -Y2i>>$PS\n", slow_high/2.);
+	fprintf(fp,"echo 180 %f W | gmt pstext -R -J -K -O -F+f15p,27,red -Y-1.9i -X-2i>>$PS\n", slow_high/2.);
+	fprintf(fp,"echo -90 %f S | gmt pstext -R -J -K -O -F+f15p,27,red -X1.9i -Y-2i>>$PS\n", slow_high/2.);
+	fprintf(fp,"gmt psxy -R -J -O -T>>$PS\n");
+	fprintf(fp,"ps2pdf $PS $PDF\n");
+	fprintf(fp,"rm gmt.* tmp.*\n");
+	fprintf(fp,"evince $PDF\n");
+
+/*-------------------------------------------release dynamic memory of array "coordi", "amp", "tmp" and "sum"-----------------------------------------------*/
+    fclose(fp); fclose(fout);
+    for ( i = 0; i < count; i++ ) {
+        free(coordi[i]); free(amp[i]); free(tmp[i]);
+    }
+    free(coordi); free(amp); free(tmp); free(sum);
+
     time_end = clock();
     time_used = (time_end - time_start)/CLOCKS_PER_SEC;
     printf("Time used: %f seconds!!!\n", time_used);
-
-    fclose(fp); fclose(fout);
-    for ( i = 0; i < count; i++ ) {
-        free(coordi[i]); free(amp[i]);
-    }
-    free(coordi); free(amp); free(sum);
     return 0;
 }
