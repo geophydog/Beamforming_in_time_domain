@@ -19,7 +19,7 @@
 #include <time.h>
 #include "sacio.h"
 
-/*----------------------------------------------------------------------------------------------------------------------------------------------------------*/
+/*-------------------------------------------------to exclude space or new line chracter of a string-------------------------------------------------------*/
 void no_spa(char *ps) {
     char *pt = ps;
     while ( *ps != '\0' ) {
@@ -31,7 +31,7 @@ void no_spa(char *ps) {
     *pt = '\0';
 }
 
-/*----------------------------------------------------------------------------------------------------------------------------------------------------------*/
+/*---------------------------------------------------------to get 2^k( k is an integer ), and m <= 2^k ----------------------------------------------------*/
 int near_pow2( int n ) {
     int m;
     float f;
@@ -40,7 +40,7 @@ int near_pow2( int n ) {
     return m;
 }
 
-/*----------------------------------------------------------------------------------------------------------------------------------------------------------*/
+/*------------------------------------to calculate cross-coeffient of two  inputing arrays------------------------------------------------------------------*/
 float coef( float *data1, float *data2, int npts ) {
     int i;
     float cof, x_y = 0., x_sqa = 0., y_sqa = 0.;
@@ -58,7 +58,7 @@ float coef( float *data1, float *data2, int npts ) {
 #define g 111.195     // The value of transformation from degree to km in the Earth
 
 
-/*-----------------------------------------------------------------------------------------------------------------------------------------------------------*/
+/*-----------------------------------------------------MAIN PROGRAM-----------------------------------------------------------------------------------------*/
 int main( int argc, char *argv[] ) {
     float *data, slow_low, slow_high, slow_step, slow_scan, slow_x, slow_y, baz_scan, baz_step, grid, grid_step,\
         shifttime, center_lon = 0., center_lat = 0., center_ele = 0., fre_low, fre_high, t1, t2,\
@@ -225,10 +225,10 @@ int main( int argc, char *argv[] ) {
 	fprintf(fp,"gmt surface tmp.file -R$R1 -I%f/%f -Gtmp.grd\n", baz_step/10., slow_step/5.);
 	fprintf(fp,"gmt makecpt -Cjet -T0/1/0.1 -Z >tmp.cpt\n");
 	fprintf(fp,"gmt psxy -R$R2 -J$J -K -T>$PS\n");
-	fprintf(fp,"gmt grdimage tmp.grd -R -J -K -O -Ctmp.cpt -Bx30g15+l\"backazimuth(deg)\" -By%fg%f+l\"slowness(s/km)\" -BwsEN+t\"bandpass: %.3f ~ %.3f Hz)\" >>$PS\n", slow_high/5., slow_high/10., fre_low, fre_high);
-	while ( grid > 1e-6 ) {
-		fprintf(fp,"echo 90 %.3f %.3f | gmt pstext -R -J -K -O -F+f10p>>$PS\n", grid, grid);
+	fprintf(fp,"gmt grdimage tmp.grd -R -J -K -O -Ctmp.cpt -Bx30g15+l\"backazimuth(deg)\" -By%fg%f+l\"slowness(s/km)\" -BwsEN+t\"bandpass: %.3f ~ %.3f Hz\" >>$PS\n", slow_high/5., slow_high/10., fre_low, fre_high);
+	while ( grid > (2.8*grid_step) ) {
 		grid -= grid_step;
+		fprintf(fp,"echo 90 %.3f %.3f | gmt pstext -R -J -K -O -F+f12p>>$PS\n", grid, grid);
 	}
 	fprintf(fp,"gmt psscale -Ctmp.cpt -D7i/3i/12/0.8 -Ba0.1g0:\"Normalized cross-coeffient\": -K -O >>$PS\n");
 	fprintf(fp,"echo 0 %f E | gmt pstext -R -J -K -O -F+f15p,27,red -X1.9i>>$PS\n", slow_high/2.);
