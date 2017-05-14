@@ -74,7 +74,7 @@ int main( int argc, char *argv[] ) {
     SACHEAD hd;
 
     if ( argc != 11 ) {
-		fprintf(stderr,"***********************************************************************************************************************************\n");
+	    fprintf(stderr,"***********************************************************************************************************************************\n");
         fprintf(stderr,"** Usage: beamforming <sacfile.slt> <t1> <t2> <fre_low> <fre_high> <slow_low> <slow_high> <slow_step> <baz_step> <output_file>   **\n");
         fprintf(stderr,"**       <t1>          Beginning time of inputing SAC files;                                                                     **\n");
         fprintf(stderr,"**       <t2>          Ending time of inputing SAC files;                                                                        **\n");
@@ -86,10 +86,10 @@ int main( int argc, char *argv[] ) {
         fprintf(stderr,"**       <slow_step>   THe step length of scaning horizontal slowness;                                                           **\n");
         fprintf(stderr,"**       <baz_step>    The step length of scaning backazimuth;                                                                   **\n");
         fprintf(stderr,"**       <output_file> The file name of outputing result; Containing 3 columns Col1: baz  Col2: slowness  Col3: cross-coeffient  **\n");
-		fprintf(stderr,"**       ATTENTION!!! plot shell script will be saved in file \"plot.sh\", and just run command \"sh plot.sh!\"                      **\n");
-		fprintf(stderr,"**       RUN \"sh plot.sh\" REQUIRES GMT(the Generic Mapping Tools, major version 5)                                               **\n");
-		fprintf(stderr,"***********************************************************************************************************************************\n");
-        exit(1);
+        fprintf(stderr,"**       ATTENTION!!! plot shell script will be saved in file \"plot.sh\", and just run command \"sh plot.sh!\"                  **\n");
+        fprintf(stderr,"**       RUN \"sh plot.sh\" REQUIRES GMT(the Generic Mapping Tools, major version 5)                                             **\n");
+	    fprintf(stderr,"***********************************************************************************************************************************\n");
+     	exit(1);
     }
 
     fin = fopen(argv[1], "r");
