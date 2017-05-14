@@ -43,14 +43,19 @@ int near_pow2( int n ) {
 /*------------------------------------to calculate cross-coeffient of two  inputing arrays------------------------------------------------------------------*/
 float coef( float *data1, float *data2, int npts ) {
     int i;
-    float cof, x_y = 0., x_sqa = 0., y_sqa = 0.;
+    float cof, x_y = 0., x_sqa = 0., y_sqa = 0., xy_sqa;
     for ( i = 0; i < npts; i ++ ) {
         x_sqa += data1[i]*data1[i];
         y_sqa += data2[i]*data2[i], x_y += data1[i]*data2[i];
     }
-    cof = x_y / sqrt(x_sqa*y_sqa);
-    return cof;
-
+	xy_sqa = sqrt(x_sqa*y_sqa);
+	if ( fabs(xy_sqa) < 1e-6 ) {
+		cof = 0.;
+	}
+	else {
+		cof = x_y / xy_sqa;
+	}
+	return fabs(cof);
 }
 
 /*----------------------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -152,7 +157,7 @@ int main( int argc, char *argv[] ) {
 
     while ( slow_scan <= slow_high ) {
         baz_scan = -185;
-        while( baz_scan <= 180 ) {
+        while( baz_scan <= 185 ) {
             for ( i = 0; i < beam_npts; i++ ) {
                 sum[i] = 0., cof = 0.;
             }
