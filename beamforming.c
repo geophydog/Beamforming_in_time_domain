@@ -67,7 +67,7 @@ float coef( float *data1, float *data2, int npts ) {
 int main( int argc, char *argv[] ) {
     float *data, slow_low, slow_high, slow_step, slow_scan, slow_x, slow_y, baz_scan, baz_step, grid, grid_step,\
         shifttime, center_lon = 0., center_lat = 0., center_ele = 0., fre_low, fre_high, t1, t2,\
-        delta, dx, dy, *sum, time_start, time_end, time_used, **coordi, **amp, cof = 0., **tmp, cof_peak = 0.;
+        delta, dx, dy, *sum, time_start, time_end, time_used, **coordi, **amp, cof = 0., **tmp, cof_peak = 0., cof_low = 1.;
     int i, j, size = 256, count = 0, sac_npts, sta_index = 0, shift_index, begin_index, end_index, beam_npts, k = 0;
     char *ss, ch[16];
     FILE *fin, *fout, *fp, *fbp;
@@ -204,6 +204,7 @@ int main( int argc, char *argv[] ) {
                 cof += coef(sum, tmp[i], beam_npts)/count;
             }
 			if ( cof_peak < cof ) cof_peak = cof;
+			if ( cof_low > cof ) cof_low = cof;
             fprintf(fout,"%f %f %f\n", baz_scan, slow_scan, cof);
             baz_scan += baz_step;
         }
@@ -219,7 +220,7 @@ int main( int argc, char *argv[] ) {
 	fprintf(fp,"gmt gmtset MAP_GRID_PEN_PRIMARY 0.1p,white\n");
 	fprintf(fp,"gmt gmtset MAP_GRID_PEN_SECONDARY 0.05p,white\n");
 	if ( slow_low >= 0.2*slow_high ) {
-		fprintf(fp,"R1=-185/180/%f/%f\n", slow_low, slow_high);
+		fprintf(fp,"R1=-185/185/%f/%f\n", slow_low, slow_high);
 		fprintf(fp,"R2=-180/180/%f/%f\n", slow_low, slow_high);
 	}
 	else {
@@ -230,7 +231,7 @@ int main( int argc, char *argv[] ) {
 	fprintf(fp,"PS=plot.ps\n"); fprintf(fp,"PDF=plot.pdf\n");
 	fprintf(fp,"awk '{print $1,$2,$3/%f}' %s > tmp.file\n", cof_peak, argv[10]);
 	fprintf(fp,"gmt surface tmp.file -R$R1 -I%f/%f -Gtmp.grd\n", baz_step/10., slow_step/5.);
-	fprintf(fp,"gmt makecpt -Cjet -T0/1/0.1 -Z >tmp.cpt\n");
+	fprintf(fp,"gmt makecpt -Cjet -T%f/1/0.1 -Z >tmp.cpt\n", cof_low/cof_peak);
 	fprintf(fp,"gmt psxy -R$R2 -J$J -K -T>$PS\n");
 	fprintf(fp,"gmt grdimage tmp.grd -R -J -K -O -Ctmp.cpt -Bx30g15+l\"backazimuth(deg)\" -By%fg%f+l\"slowness(s/km)\" -BwsEN+t\"bandpass: %.3f ~ %.3f Hz\" >>$PS\n", slow_high/5., slow_high/10., fre_low, fre_high);
 	while ( grid > (2.8*grid_step) ) {
