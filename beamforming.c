@@ -49,7 +49,7 @@ float coef( float *data1, float *data2, int npts ) {
         y_sqa += data2[i]*data2[i], x_y += data1[i]*data2[i];
     }
 	xy_sqa = sqrt(x_sqa*y_sqa);
-	if ( fabs(xy_sqa) < 0. ) {
+	if ( fabs(xy_sqa) == 0. ) {
 		cof = 0.;
 	}
 	else {
