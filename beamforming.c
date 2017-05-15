@@ -49,7 +49,7 @@ float coef( float *data1, float *data2, int npts ) {
         y_sqa += data2[i]*data2[i], x_y += data1[i]*data2[i];
     }
 	xy_sqa = sqrt(x_sqa*y_sqa);
-	if ( fabs(xy_sqa) < 1e-6 ) {
+	if ( fabs(xy_sqa) < 0. ) {
 		cof = 0.;
 	}
 	else {
@@ -118,6 +118,8 @@ int main( int argc, char *argv[] ) {
     }
     free(data); fclose(fin);
 
+	center_lon /= count; center_lat /= count; center_ele /= count;
+
     begin_index = (int)(t1/delta);
     end_index = (int)(t2/delta);
     beam_npts = (int)((t2-t1)/delta);
@@ -148,7 +150,7 @@ int main( int argc, char *argv[] ) {
         system("sh bandpassfilter");
         system("rm bandpassfilter");
         data = read_sac(ss,&hd);
-        coordi[sta_index][0] = center_lon - hd.stlo; coordi[sta_index][1] = center_lat - hd.stla; coordi[sta_index][2] = center_ele - hd.stel;
+        coordi[sta_index][0] = hd.stlo; coordi[sta_index][1] = hd.stla; coordi[sta_index][2] = hd.stel;
         for ( i = 0; i < sac_npts; i ++ ) amp[sta_index][i] = data[i];
         sta_index += 1;
     }
@@ -158,8 +160,8 @@ int main( int argc, char *argv[] ) {
     slow_scan = slow_low;
 
     while ( slow_scan <= slow_high ) {
-        baz_scan = -185;
-        while( baz_scan <= 185 ) {
+        baz_scan = -50;
+        while( baz_scan <= 365 ) {
             for ( i = 0; i < beam_npts; i++ ) {
                 sum[i] = 0., cof = 0.;
             }
@@ -167,11 +169,13 @@ int main( int argc, char *argv[] ) {
                 for ( j = 0; j < beam_npts; j ++ )
                     tmp[i][j] = 0.;
             for ( i = 0; i < count; i ++ ) {
-                slow_x = slow_scan*cos(baz_scan/180.*pi);
-                slow_y = slow_scan*sin(baz_scan/180.*pi);
-                dx = (coordi[i][0] - center_lon)*g; dy = (coordi[i][1] - center_lat)*g;
+                slow_x = slow_scan*cos((90 - baz_scan)/180.*pi);
+                slow_y = slow_scan*sin((90 - baz_scan)/180.*pi);
+	            dx = (center_lon - coordi[i][0])*g; dy = (center_lat - coordi[i][1])*g;
+                //dx = (coordi[i][0] - center_lon)*g; dy = (coordi[i][1] - center_lat)*g;
                 shifttime = slow_x*dx + slow_y*dy;
                 shift_index = (int)(shifttime/delta);
+				//printf("SHIFT_INDEX : %d  dx:%f  dy: %f slow_x: %f  slow_y: %f,  center_lon: %f  center_lat: %f %f %f\n", shift_index, dx, dy, slow_x, slow_y, center_lon, center_lat, coordi[i][0], coordi[i][1]);
                 if ( (shift_index+begin_index) >= 0 && (shift_index+begin_index + beam_npts) < sac_npts ) {
                     for ( j = 0; j < beam_npts; j ++ ) {
                         sum[j] += amp[i][j+begin_index+shift_index]/count;
@@ -179,19 +183,19 @@ int main( int argc, char *argv[] ) {
                     }
                 }
                 else if ( (shift_index+begin_index) < 0 ) {
-					for (j = 0; j < beam_npts; j ++) {
-                    	if ( (j+begin_index+shift_index) < 0 ) {
+	                for (j = 0; j < beam_npts; j ++) {
+                        if ( (j+begin_index+shift_index) < 0 ) {
                         	sum[j] += 0.; tmp[i][j] = 0.;
-                    	}
+                        }
                     	else {
                         sum[j] += amp[i][j+begin_index+shift_index];
                         tmp[i][j] = amp[i][j+begin_index+shift_index];
                     	}
-					}
-				}
+              	    }
+	            }
                 else if ( (shift_index+begin_index+beam_npts) >= sac_npts ) {
                     for ( j = 0; j < beam_npts; j ++ ) {
-						if( (shift_index+begin_index+j) >= sac_npts ) {
+	                    if( (shift_index+begin_index+j) >= sac_npts ) {
                         	sum[j] += 0.; tmp[i][j] = 0.;
                     	}
                     	else  {
@@ -199,7 +203,7 @@ int main( int argc, char *argv[] ) {
                         	tmp[i][j] = amp[i][j+begin_index+shift_index];
                     	}
                 	}
-				}
+                }
                 else continue;
             }
             for ( i = 0; i < count; i ++ ) {
@@ -208,6 +212,9 @@ int main( int argc, char *argv[] ) {
 			if ( cof_peak < cof ) cof_peak = cof;
 			if ( cof_low > cof ) cof_low = cof;
             fprintf(fout,"%f %f %f\n", baz_scan, slow_scan, cof);
+			//sprintf(ch,"%d.sac",k);
+			//k += 1; hd.b = t1; hd.e = t2; hd.npts = beam_npts;
+			//write_sac(ch,hd,sum);
             baz_scan += baz_step;
         }
         slow_scan += slow_step;
@@ -222,14 +229,14 @@ int main( int argc, char *argv[] ) {
 	fprintf(fp,"gmt gmtset MAP_GRID_PEN_PRIMARY 0.1p,white\n");
 	fprintf(fp,"gmt gmtset MAP_GRID_PEN_SECONDARY 0.05p,white\n");
 	if ( slow_low >= 0.2*slow_high ) {
-		fprintf(fp,"R1=-185/185/%f/%f\n", slow_low, slow_high);
-		fprintf(fp,"R2=-180/180/%f/%f\n", slow_low, slow_high);
+		fprintf(fp,"R1=-5/365/%f/%f\n", slow_low, slow_high);
+		fprintf(fp,"R2=0/360/%f/%f\n", slow_low, slow_high);
 	}
 	else {
-		fprintf(fp,"R1=-185/180/%f/%f\n", slow_high*0.2, slow_high);
-		fprintf(fp,"R2=-180/180/%f/%f\n", slow_high*0.2, slow_high);
+		fprintf(fp,"R1=-5/365/%f/%f\n", slow_high*0.2, slow_high);
+		fprintf(fp,"R2=0/360/%f/%f\n", slow_high*0.2, slow_high);
 	}
-	fprintf(fp,"J=P6i\n");
+	fprintf(fp,"J=Pa6i\n");
 	fprintf(fp,"PS=plot.ps\n"); fprintf(fp,"PDF=plot.pdf\n");
 	fprintf(fp,"awk '{print $1,$2,$3/%f}' %s > tmp.file\n", cof_peak, argv[10]);
 	fprintf(fp,"gmt surface tmp.file -R$R1 -I%f/%f -Gtmp.grd\n", baz_step/10., slow_step/5.);
@@ -238,18 +245,24 @@ int main( int argc, char *argv[] ) {
 	fprintf(fp,"gmt grdimage tmp.grd -R -J -K -O -Ctmp.cpt -Bx30g15+l\"backazimuth(deg)\" -By%fg%f+l\"slowness(s/km)\" -BwsEN+t\"bandpass: %.3f ~ %.3f Hz\" >>$PS\n", slow_high/5., slow_high/10., fre_low, fre_high);
 	while ( grid > (2.8*grid_step) ) {
 		grid -= grid_step;
-		fprintf(fp,"echo 90 %.3f %.3f | gmt pstext -R -J -K -O -F+f12p>>$PS\n", grid, grid);
+		fprintf(fp,"echo 0 %.3f %.3f | gmt pstext -R -J -K -O -F+f12p>>$PS\n", grid, grid);
 	}
 	fprintf(fp,"gmt psscale -Ctmp.cpt -D7i/3i/12/0.8 -Ba0.1g0:\"Normalized cross-coeffient\": -K -O >>$PS\n");
-	fprintf(fp,"echo 0 %f E | gmt pstext -R -J -K -O -F+f15p,27,red -X1.9i>>$PS\n", slow_high/2.);
-	fprintf(fp,"echo 90 %f N | gmt pstext -R -J -K -O -F+f15p,27,red -X-1.9i -Y1.9i>>$PS\n", slow_high/2.);
-	fprintf(fp,"echo 180 %f W | gmt pstext -R -J -K -O -F+f15p,27,red -Y-1.9i -X-1.9i>>$PS\n", slow_high/2.);
-	fprintf(fp,"echo -90 %f S | gmt pstext -R -J -K -O -F+f15p,27,red -X1.9i -Y-1.9i>>$PS\n", slow_high/2.);
+	fprintf(fp,"echo 0 %f N | gmt pstext -R -J -K -O -F+f15p,27,red -Y1.9i>>$PS\n", slow_high/2.);
+	fprintf(fp,"echo 90 %f E | gmt pstext -R -J -K -O -F+f15p,27,red -X1.9i -Y-1.9i>>$PS\n", slow_high/2.);
+	fprintf(fp,"echo 180 %f S | gmt pstext -R -J -K -O -F+f15p,27,red -Y-1.9i -X-1.9i>>$PS\n", slow_high/2.);
+	fprintf(fp,"echo 270 %f W | gmt pstext -R -J -K -O -F+f15p,27,red -X1.9i -Y1.9i>>$PS\n", slow_high/2.);
 	fprintf(fp,"gmt psxy -R -J -O -T>>$PS\n");
 	fprintf(fp,"ps2pdf $PS $PDF\n");
 	fprintf(fp,"rm gmt.* tmp.*\n");
 	fprintf(fp,"evince $PDF\n");
 
+
+/*-----------------------------------------------------------------array coordinates------------------------------------------------------------------------*/
+	for ( i = 0; i < count; i ++ ) {
+		printf("station %4d  lon -> %10.6f  lat -> %10.6f\n", i+1, coordi[i][0], coordi[i][1]);
+	}
+	printf("array center:  lon -> %f  lat -> %f\n", center_lon, center_lat);
 /*-------------------------------------------release dynamic memory of array "coordi", "amp", "tmp" and "sum"-----------------------------------------------*/
     fclose(fp); fclose(fout);
     for ( i = 0; i < count; i++ ) {
