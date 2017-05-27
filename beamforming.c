@@ -75,7 +75,7 @@ int main( int argc, char *argv[] ) {
 
     if ( argc != 11 ) {
 	    fprintf(stderr,"***********************************************************************************************************************************\n");
-        fprintf(stderr,"** Usage: beamforming <sacfile.slt> <t1> <t2> <fre_low> <fre_high> <slow_low> <slow_high> <slow_step> <baz_step> <output_file>   **\n");
+        fprintf(stderr,"** Usage: beamforming <sacfile.lst> <t1> <t2> <fre_low> <fre_high> <slow_low> <slow_high> <slow_step> <baz_step> <output_file>   **\n");
         fprintf(stderr,"**       <t1>          Beginning time of inputing SAC files;                                                                     **\n");
         fprintf(stderr,"**       <t2>          Ending time of inputing SAC files;                                                                        **\n");
         fprintf(stderr,"**       <sacfile.lst> File contains these names of SAC format files;                                                            **\n");
