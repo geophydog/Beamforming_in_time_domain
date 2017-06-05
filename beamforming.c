@@ -260,7 +260,7 @@ int main( int argc, char *argv[] ) {
 
 /*-----------------------------------------------------------------array coordinates------------------------------------------------------------------------*/
 	for ( i = 0; i < count; i ++ ) {
-		printf("station %4d    lon -> %10.6f  lat -> %10.6f\n", i+1, coordi[i][0], coordi[i][1]);
+		printf("station %4d   lon -> %10.6f  lat -> %10.6f\n", i+1, coordi[i][0], coordi[i][1]);
 	}
 	    printf("array center:  lon -> %10.6f  lat -> %10.6f\n", center_lon, center_lat);
 /*-------------------------------------------release dynamic memory of array "coordi", "amp", "tmp" and "sum"-----------------------------------------------*/
