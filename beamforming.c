@@ -1,11 +1,11 @@
 /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 +  data:        array saving reading into SAC files                    +
-+  t1:          beginning time of doing beam-forming                   +
-+  t2:          ending time of doing beam-forming                      +
-+  fre_low:     low limitation frequency of inputint SAC files         +
-+  frehigh:     high limitation frequency of inputing SAC files        +
-+  slow_low:    low limitation scaning hirizontal slowness             +
-+  slow_high:   high limitation scaning hirizontal slowness            +
++  t1:          beginning time of executing beam-forming               +
++  t2:          ending time of executing beam-forming                  +
++  fre_low:     low limitation corner frequency of bandpassfilter      +
++  frehigh:     high limitation corner frequency of bandpass filter    +
++  slow_low:    low limitation of scaning hirizontal slowness          +
++  slow_high:   high limitation of scaning hirizontal slowness         +
 +  slow_step:   step length of scaning slowness                        +
 +  baz_tesp:    step length of scaning backazimuth                     +
 +  2017-5-11    Initially coded by Xuping Feng @ NJU                   +
