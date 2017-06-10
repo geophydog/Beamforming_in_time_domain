@@ -226,8 +226,8 @@ int main( int argc, char *argv[] ) {
 	fprintf(fp,"gmt gmtset FONT_LABEL 15p,Times-Bold,black\n");
 	fprintf(fp,"gmt gmtset FONT_TITLE 20p,27,black\n");
 	fprintf(fp,"gmt gmtset MAP_TITLE_OFFSET 40p\n");
-	fprintf(fp,"gmt gmtset MAP_GRID_PEN_PRIMARY 0.1p,white\n");
-	fprintf(fp,"gmt gmtset MAP_GRID_PEN_SECONDARY 0.05p,white\n");
+	fprintf(fp,"gmt gmtset MAP_GRID_PEN_PRIMARY 1p,white,\"..\"\n");
+	fprintf(fp,"gmt gmtset MAP_GRID_PEN_SECONDARY 1p,white,\"..\"\n");
 	if ( slow_low >= 0.2*slow_high ) {
 		fprintf(fp,"R1=-5/365/%f/%f\n", slow_low, slow_high);
 		fprintf(fp,"R2=0/360/%f/%f\n", slow_low, slow_high);
@@ -243,6 +243,13 @@ int main( int argc, char *argv[] ) {
 	fprintf(fp,"gmt makecpt -Cjet -T%f/1/0.1 -Z >tmp.cpt\n", cof_low/cof_peak);
 	fprintf(fp,"gmt psxy -R$R2 -J$J -K -T>$PS\n");
 	fprintf(fp,"gmt grdimage tmp.grd -R -J -K -O -Ctmp.cpt -Bx30g15+l\"backazimuth(deg)\" -By%fg%f+l\"slowness(s/km)\" -BwsEN+t\"bandpass: %.3f ~ %.3f Hz\" >>$PS\n", slow_high/5., slow_high/10., fre_low, fre_high);
+    fprintf(fp,"gmt psxy -R -J -K -O -W1p,white,\"..\" >>$PS<<EOF\n");
+    for ( i = 0; i < 6; i ++ ) {
+        fprintf(fp,">\n");
+        fprintf(fp,"%d %f\n", i*30, slow_high);
+        fprintf(fp,"%d %f\n", i*30+180, slow_high);
+    }
+    fprintf(fp,"EOF\n");
 	while ( grid > (2.8*grid_step) ) {
 		grid -= grid_step;
 		fprintf(fp,"echo 0 %.3f %.3f | gmt pstext -R -J -K -O -F+f12p>>$PS\n", grid, grid);
@@ -251,7 +258,7 @@ int main( int argc, char *argv[] ) {
 	fprintf(fp,"echo 0 %f N | gmt pstext -R -J -K -O -F+f15p,27,red -Y1.9i>>$PS\n", slow_high/2.);
 	fprintf(fp,"echo 90 %f E | gmt pstext -R -J -K -O -F+f15p,27,red -X1.9i -Y-1.9i>>$PS\n", slow_high/2.);
 	fprintf(fp,"echo 180 %f S | gmt pstext -R -J -K -O -F+f15p,27,red -Y-1.9i -X-1.9i>>$PS\n", slow_high/2.);
-	fprintf(fp,"echo 270 %f W | gmt pstext -R -J -K -O -F+f15p,27,red -X1.9i -Y1.9i>>$PS\n", slow_high/2.);
+	fprintf(fp,"echo 270 %f W | gmt pstext -R -J -K -O -F+f15p,27,red -X-1.9i -Y1.9i>>$PS\n", slow_high/2.);
 	fprintf(fp,"gmt psxy -R -J -O -T>>$PS\n");
 	fprintf(fp,"ps2pdf $PS $PDF\n");
 	fprintf(fp,"rm gmt.* tmp.*\n");
