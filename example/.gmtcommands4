@@ -1,6 +1,0 @@
-# GMT common arguments shelf
--B100:Time(sec):/0.2:Distance(deg):WSen
--JX9i/7i
--R0/1000/77.4/78.9
--jX9i/7i
-EOF
