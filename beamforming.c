@@ -237,7 +237,7 @@ int main( int argc, char *argv[] ) {
 		fprintf(fp,"R2=0/360/%f/%f\n", slow_high*0.2, slow_high);
 	}
 	fprintf(fp,"J=Pa6i\n");
-	fprintf(fp,"PS=plot.ps\n"); fprintf(fp,"PDF=plot.pdf\n");
+	fprintf(fp,"PS=%f-%f.ps\n", t1, t2); fprintf(fp,"PDF=%f-%f.pdf\n", t1, t2);
 	fprintf(fp,"awk '{print $1,$2,$3/%f}' %s > tmp.file\n", cof_peak, argv[10]);
 	fprintf(fp,"gmt surface tmp.file -R$R1 -I%f/%f -Gtmp.grd\n", baz_step/10., slow_step/5.);
 	fprintf(fp,"gmt makecpt -Cjet -T%f/1/0.1 -Z >tmp.cpt\n", cof_low/cof_peak);
@@ -261,6 +261,7 @@ int main( int argc, char *argv[] ) {
 	fprintf(fp,"echo 270 %f W | gmt pstext -R -J -K -O -F+f15p,27,red -X-1.9i -Y1.9i>>$PS\n", slow_high/2.);
 	fprintf(fp,"gmt psxy -R -J -O -T>>$PS\n");
 	fprintf(fp,"ps2pdf $PS $PDF\n");
+    fprintf(fp,"gmt psconvert %f-%f.ps -A -P -Tg\n", t1, t2);
 	fprintf(fp,"rm gmt.* tmp.*\n");
 	fprintf(fp,"evince $PDF\n");
 
