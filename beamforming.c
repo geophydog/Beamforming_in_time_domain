@@ -263,8 +263,6 @@ int main( int argc, char *argv[] ) {
 	fprintf(fp,"ps2pdf $PS $PDF\n");
     fprintf(fp,"gmt psconvert %f-%f.ps -A -P -Tg\n", t1, t2);
 	fprintf(fp,"rm gmt.* tmp.*\n");
-	fprintf(fp,"evince $PDF\n");
-
 
 /*-----------------------------------------------------------------array coordinates------------------------------------------------------------------------*/
 	for ( i = 0; i < count; i ++ ) {
