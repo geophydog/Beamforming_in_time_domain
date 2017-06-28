@@ -69,7 +69,7 @@ int main( int argc, char *argv[] ) {
         shifttime, center_lon = 0., center_lat = 0., center_ele = 0., fre_low, fre_high, t1, t2,\
         delta, dx, dy, *sum, time_start, time_end, time_used, **coordi, **amp, cof = 0., **tmp, cof_peak = 0., cof_low = 1.;
     int i, j, size = 256, count = 0, sac_npts, sta_index = 0, shift_index, begin_index, end_index, beam_npts, k = 0;
-    char *ss, ch[16];
+    char *ss, ch[16], new_sac[256];
     FILE *fin, *fout, *fp, *fbp;
     SACHEAD hd;
 
@@ -140,9 +140,11 @@ int main( int argc, char *argv[] ) {
     while ( fgets(ss, size, fin) ) {
         no_spa(ss);
         fbp = fopen("bandpassfilter","w");
+        fprintf(fbp,"SAC_DISPLAY_COPYRIGHT=0\n");
         fprintf(fbp,"sac<<END\n");
         fprintf(fbp,"r %s\n", ss);
         fprintf(fbp,"bp c %f %f n 4 p 2\n", fre_low, fre_high);
+        strcat(ss,".bp");
         fprintf(fbp,"w over %s\n", ss);
         fprintf(fbp,"q\n");
         fprintf(fbp,"END\n");
