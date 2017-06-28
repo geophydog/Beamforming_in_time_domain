@@ -69,7 +69,7 @@ int main( int argc, char *argv[] ) {
         shifttime, center_lon = 0., center_lat = 0., center_ele = 0., fre_low, fre_high, t1, t2,\
         delta, dx, dy, *sum, time_start, time_end, time_used, **coordi, **amp, cof = 0., **tmp, cof_peak = 0., cof_low = 1.;
     int i, j, size = 256, count = 0, sac_npts, sta_index = 0, shift_index, begin_index, end_index, beam_npts, k = 0;
-    char *ss, ch[16], new_sac[256];
+    char *ss;
     FILE *fin, *fout, *fp, *fbp;
     SACHEAD hd;
 
@@ -156,7 +156,7 @@ int main( int argc, char *argv[] ) {
         for ( i = 0; i < sac_npts; i ++ ) amp[sta_index][i] = data[i];
         sta_index += 1;
     }
-    free(data);fclose(fin);
+    system("rm *.bp"); free(data);fclose(fin);
 
 /*-------------------------------------------------------------------scaning slowness and backazimuth------------------------------------------------*/
     slow_scan = slow_low;
@@ -174,10 +174,8 @@ int main( int argc, char *argv[] ) {
                 slow_x = slow_scan*cos((90 - baz_scan)/180.*pi);
                 slow_y = slow_scan*sin((90 - baz_scan)/180.*pi);
 	            dx = (center_lon - coordi[i][0])*g; dy = (center_lat - coordi[i][1])*g;
-                //dx = (coordi[i][0] - center_lon)*g; dy = (coordi[i][1] - center_lat)*g;
                 shifttime = slow_x*dx + slow_y*dy;
                 shift_index = (int)(shifttime/delta);
-				//printf("SHIFT_INDEX : %d  dx:%f  dy: %f slow_x: %f  slow_y: %f,  center_lon: %f  center_lat: %f %f %f\n", shift_index, dx, dy, slow_x, slow_y, center_lon, center_lat, coordi[i][0], coordi[i][1]);
                 if ( (shift_index+begin_index) >= 0 && (shift_index+begin_index + beam_npts) < sac_npts ) {
                     for ( j = 0; j < beam_npts; j ++ ) {
                         sum[j] += amp[i][j+begin_index+shift_index]/count;
@@ -214,9 +212,6 @@ int main( int argc, char *argv[] ) {
 			if ( cof_peak < cof ) cof_peak = cof;
 			if ( cof_low > cof ) cof_low = cof;
             fprintf(fout,"%f %f %f\n", baz_scan, slow_scan, cof);
-			//sprintf(ch,"%d.sac",k);
-			//k += 1; hd.b = t1; hd.e = t2; hd.npts = beam_npts;
-			//write_sac(ch,hd,sum);
             baz_scan += baz_step;
         }
         slow_scan += slow_step;
