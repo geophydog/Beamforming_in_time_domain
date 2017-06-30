@@ -86,7 +86,7 @@ int main( int argc, char *argv[] ) {
         fprintf(stderr,"**       <slow_step>   THe step length of scaning horizontal slowness;                                                           **\n");
         fprintf(stderr,"**       <baz_step>    The step length of scaning backazimuth;                                                                   **\n");
         fprintf(stderr,"**       <output_file> The file name of outputing result; Containing 3 columns Col1: baz  Col2: slowness  Col3: cross-coeffient  **\n");
-        fprintf(stderr,"**                     <<<Specially, the unit of inpuuting slowness is sec/deg>>>;                                               **\n");
+        fprintf(stderr,"**                     <<<SPECIALLY, the unit of inputting slowness is sec/deg>>>;                                               **\n");
         fprintf(stderr,"**       ATTENTION!!! plot shell script will be saved in file \"plot.sh\", and just run command \"sh plot.sh!\";                     **\n");
         fprintf(stderr,"**       RUN \"sh plot.sh\" REQUIRES GMT(the Generic Mapping Tools, major version 5).                                              **\n");
 	    fprintf(stderr,"***********************************************************************************************************************************\n");
