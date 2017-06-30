@@ -86,6 +86,7 @@ int main( int argc, char *argv[] ) {
         fprintf(stderr,"**       <slow_step>   THe step length of scaning horizontal slowness;                                                           **\n");
         fprintf(stderr,"**       <baz_step>    The step length of scaning backazimuth;                                                                   **\n");
         fprintf(stderr,"**       <output_file> The file name of outputing result; Containing 3 columns Col1: baz  Col2: slowness  Col3: cross-coeffient  **\n");
+        fprintf(stderr,"**                     <<<Specially, the unit of inpuuting slowness is sec/deg>>>;                                               **\n");
         fprintf(stderr,"**       ATTENTION!!! plot shell script will be saved in file \"plot.sh\", and just run command \"sh plot.sh!\";                     **\n");
         fprintf(stderr,"**       RUN \"sh plot.sh\" REQUIRES GMT(the Generic Mapping Tools, major version 5).                                              **\n");
 	    fprintf(stderr,"***********************************************************************************************************************************\n");
@@ -171,9 +172,9 @@ int main( int argc, char *argv[] ) {
                 for ( j = 0; j < beam_npts; j ++ )
                     tmp[i][j] = 0.;
             for ( i = 0; i < count; i ++ ) {
-                slow_x = slow_scan*cos((90 - baz_scan)/180.*pi);
-                slow_y = slow_scan*sin((90 - baz_scan)/180.*pi);
-	            dx = (center_lon - coordi[i][0])*g; dy = (center_lat - coordi[i][1])*g;
+                slow_x = slow_scan*cos( (90 - baz_scan)/180.*pi );
+                slow_y = slow_scan*sin( (90 - baz_scan)/180.*pi );
+	            dx = center_lon - coordi[i][0]; dy = center_lat - coordi[i][1];
                 shifttime = slow_x*dx + slow_y*dy;
                 shift_index = (int)(shifttime/delta);
                 if ( (shift_index+begin_index) >= 0 && (shift_index+begin_index + beam_npts) < sac_npts ) {
@@ -260,6 +261,7 @@ int main( int argc, char *argv[] ) {
 	fprintf(fp,"ps2pdf $PS $PDF\n");
     fprintf(fp,"gmt psconvert %f-%f.ps -A -P -Tg\n", t1, t2);
 	fprintf(fp,"rm gmt.* tmp.*\n");
+    fprintf(fp,"evince $PDF");
 
 /*-----------------------------------------------------------------array coordinates------------------------------------------------------------------------*/
 	for ( i = 0; i < count; i ++ ) {
