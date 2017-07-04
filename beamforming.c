@@ -80,23 +80,23 @@ int main( int argc, char *argv[] ) {
     SACHEAD hd;
 
     if ( argc != 12 ) {
-	    fprintf(stderr,"***********************************************************************************************************************************\n");
-        fprintf(stderr,"** Usage: beamforming <sacfile.lst> <t1> <t2> <fre_low> <fre_high> <slow_low> <slow_high> <slow_step> <baz_step> <output_file>   **\n");
-        fprintf(stderr,"**       <t1>          Beginning time of inputing SAC files;                                                                     **\n");
-        fprintf(stderr,"**       <t2>          Ending time of inputing SAC files;                                                                        **\n");
-        fprintf(stderr,"**       <sacfile.lst> File contains these names of SAC format files;                                                            **\n");
-        fprintf(stderr,"**       <fre_low>     The low limitation of frequency of bandpass of SAC file;                                                  **\n");
-        fprintf(stderr,"**       <fre_high>    The high limitation of frequency of bandpass of SAC file;                                                 **\n");
-        fprintf(stderr,"**       <slow_low>    The low limitation of scaning horizontal slowness;                                                        **\n");
-        fprintf(stderr,"**       <slow_high>   The high limitation of scaning horizontal slowness;                                                       **\n");
-        fprintf(stderr,"**       <slow_step>   THe step length of scaning horizontal slowness;                                                           **\n");
-        fprintf(stderr,"**       <baz_step>    The step length of scaning backazimuth;                                                                   **\n");
-        fprintf(stderr,"**       <Nth_root>    Nth_root slant stacking;                                                                                  **\n");
-        fprintf(stderr,"**       <output_file> The file name of outputing result; Containing 3 columns Col1: baz  Col2: slowness  Col3: cross-coeffient  **\n");
-        fprintf(stderr,"**                     <<<SPECIALLY, the unit of inputting slowness is sec/deg>>>;                                               **\n");
-        fprintf(stderr,"**       ATTENTION!!! plot shell script will be saved in file \"plot.sh\", and just run command \"sh plot.sh!\";                     **\n");
-        fprintf(stderr,"**       RUN \"sh plot.sh\" REQUIRES GMT(the Generic Mapping Tools, major version 5).                                              **\n");
-	    fprintf(stderr,"***********************************************************************************************************************************\n");
+	    fprintf(stderr,"**********************************************************************************************************************************************\n");
+        fprintf(stderr,"** Usage: beamforming <sacfile.lst> <t1> <t2> <fre_low> <fre_high> <slow_low> <slow_high> <slow_step> <baz_step> <Nth_root> <output_file>   **\n");
+        fprintf(stderr,"**       <t1>          [1]  Beginning time of inputing SAC files;                                                                           **\n");
+        fprintf(stderr,"**       <t2>          [2]  Ending time of inputing SAC files;                                                                              **\n");
+        fprintf(stderr,"**       <sacfile.lst> [3]  File contains these names of SAC format files;                                                                  **\n");
+        fprintf(stderr,"**       <fre_low>     [4]  The low limitation of frequency of bandpass of SAC file;                                                        **\n");
+        fprintf(stderr,"**       <fre_high>    [5]  The high limitation of frequency of bandpass of SAC file;                                                       **\n");
+        fprintf(stderr,"**       <slow_low>    [6]  The low limitation of scaning horizontal slowness;                                                              **\n");
+        fprintf(stderr,"**       <slow_high>   [7]  The high limitation of scaning horizontal slowness;                                                             **\n");
+        fprintf(stderr,"**       <slow_step>   [8]  THe step length of scaning horizontal slowness;                                                                 **\n");
+        fprintf(stderr,"**       <baz_step>    [9]  The step length of scaning backazimuth;                                                                         **\n");
+        fprintf(stderr,"**       <Nth_root>    [10] Nth_root slant stacking;                                                                                        **\n");
+        fprintf(stderr,"**       <output_file> [11] The file name of outputing result; Containing 3 columns Col1: baz  Col2: slowness  Col3: cross-coeffient        **\n");
+        fprintf(stderr,"**                     <<<SPECIALLY, the unit of inputting slowness is sec/deg>>>;                                                          **\n");
+        fprintf(stderr,"**       ATTENTION!!! plot shell script will be saved in file \"plot.sh\", and just run command \"sh plot.sh!\";                                **\n");
+        fprintf(stderr,"**       RUN \"sh plot.sh\" REQUIRES GMT(the Generic Mapping Tools, major version 5).                                                         **\n");
+	    fprintf(stderr,"**********************************************************************************************************************************************\n");
      	exit(1);
     }
 
