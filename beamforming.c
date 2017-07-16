@@ -228,7 +228,7 @@ int main( int argc, char *argv[] ) {
 		fprintf(fp,"R2=0/360/%f/%f\n", slow_high*0.2, slow_high);
 	}
 	fprintf(fp,"J=Pa6i\n");
-	fprintf(fp,"PS=%f-%f.ps\n", t1, t2); fprintf(fp,"PDF=%f-%f.pdf\n", t1, t2);
+	fprintf(fp,"PS=%.3f-%.3f.ps\n", t1, t2); fprintf(fp,"PDF=%.3f-%.3f.pdf\n", t1, t2);
 	fprintf(fp,"awk '{print $1,$2,$3/%f}' %s > tmp.file\n", cof_peak, argv[11]);
 	fprintf(fp,"gmt surface tmp.file -R$R1 -I%f/%f -Gtmp.grd\n", baz_step/10., slow_step/5.);
 	fprintf(fp,"gmt makecpt -Cjet -T%f/1/0.01 -Z >tmp.cpt\n", cof_low/cof_peak);
