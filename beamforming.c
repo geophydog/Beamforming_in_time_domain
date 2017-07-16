@@ -252,7 +252,7 @@ int main( int argc, char *argv[] ) {
 	fprintf(fp,"echo 270 %f W | gmt pstext -R -J -K -O -F+f15p,27,red -X-1.9i -Y1.9i>>$PS\n", slow_high/2.);
 	fprintf(fp,"gmt psxy -R -J -O -T>>$PS\n");
 	fprintf(fp,"ps2pdf $PS $PDF\n");
-    fprintf(fp,"gmt psconvert %f-%f.ps -A -P -Tg\n", t1, t2);
+    fprintf(fp,"gmt psconvert %.3f-%.3f.ps -A -P -Tg\n", t1, t2);
 	fprintf(fp,"rm gmt.* tmp.*\n");
     fprintf(fp,"evince $PDF");
 
