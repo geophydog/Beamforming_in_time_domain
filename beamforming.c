@@ -172,6 +172,7 @@ int main( int argc, char *argv[] ) {
 
     while ( slow_scan <= slow_high ) {
         baz_scan = -10.;
+        printf("Now scanning slowness %f deg/sec ...\n", slow_scan);
         while( baz_scan <= 370. ) {
             for ( i = 0; i < beam_npts; i++ ) {
                 sum[i] = 0., cof = 0.;
