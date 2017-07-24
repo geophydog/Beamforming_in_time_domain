@@ -73,15 +73,15 @@ float sign( float x  ) {
 int main( int argc, char *argv[] ) {
     float *data, slow_low, slow_high, slow_step, slow_scan, slow_x, slow_y, baz_scan, baz_step, grid, grid_step,\
         shifttime, center_lon = 0., center_lat = 0., center_ele = 0., fre_low, fre_high, t1, t2, delta, dx, dy, \
-        *sum, time_start, time_end, time_used, **coordi, **amp, cof = 0., **tmp, cof_peak = 0., cof_low = 1., Nth_root, tmp1, tmp2;
+        *sum, time_start, time_end, time_used, **coordi, **amp, cof = 0., **tmp, cof_peak = 0., cof_low = 1., tmp1;
     int i, j, size = 256, count = 0, sac_npts, sta_index = 0, shift_index, begin_index, end_index, beam_npts, k = 0;
     char *ss;
     FILE *fin, *fout, *fp, *fbp;
     SACHEAD hd;
 
-    if ( argc != 12 ) {
+    if ( argc != 11 ) {
 	    fprintf(stderr,"**********************************************************************************************************************************************\n");
-        fprintf(stderr,"** Usage: beamforming <sacfile.lst> <t1> <t2> <fre_low> <fre_high> <slow_low> <slow_high> <slow_step> <baz_step> <Nth_root> <output_file>   **\n");
+        fprintf(stderr,"** Usage: beamforming <sacfile.lst> <t1> <t2> <fre_low> <fre_high> <slow_low> <slow_high> <slow_step> <baz_step>  <output_file>             **\n");
         fprintf(stderr,"**       <t1>          [1]  Beginning time of inputing SAC files;                                                                           **\n");
         fprintf(stderr,"**       <t2>          [2]  Ending time of inputing SAC files;                                                                              **\n");
         fprintf(stderr,"**       <sacfile.lst> [3]  File contains these names of SAC format files;                                                                  **\n");
@@ -91,8 +91,7 @@ int main( int argc, char *argv[] ) {
         fprintf(stderr,"**       <slow_high>   [7]  The high limitation of scaning horizontal slowness;                                                             **\n");
         fprintf(stderr,"**       <slow_step>   [8]  THe step length of scaning horizontal slowness;                                                                 **\n");
         fprintf(stderr,"**       <baz_step>    [9]  The step length of scaning backazimuth;                                                                         **\n");
-        fprintf(stderr,"**       <Nth_root>    [10] Nth_root slant stacking;                                                                                        **\n");
-        fprintf(stderr,"**       <output_file> [11] The file name of outputing result; Containing 3 columns Col1: baz  Col2: slowness  Col3: cross-coeffient        **\n");
+        fprintf(stderr,"**       <output_file> [10] The file name of outputing result; Containing 3 columns Col1: baz  Col2: slowness  Col3: cross-coeffient        **\n");
         fprintf(stderr,"**                     <<<SPECIALLY, the unit of inputting slowness is sec/deg>>>;                                                          **\n");
         fprintf(stderr,"**       ATTENTION!!! plot shell script will be saved in file \"plot.sh\", and just run command \"sh plot.sh!\";                                **\n");
         fprintf(stderr,"**       RUN \"sh plot.sh\" REQUIRES GMT(the Generic Mapping Tools, major version 5).                                                         **\n");
@@ -109,8 +108,7 @@ int main( int argc, char *argv[] ) {
     slow_high = atof(argv[7]);
     slow_step = atof(argv[8]);
     baz_step = atof(argv[9]);
-    Nth_root = atof(argv[10]);
-    fout = fopen(argv[11],"w");
+    fout = fopen(argv[10],"w");
     fp = fopen("plot.sh", "w");
 
     time_start = clock();
@@ -188,7 +186,7 @@ int main( int argc, char *argv[] ) {
                 shift_index = (int)(shifttime/delta);
                 for ( j = 0; j < beam_npts; j ++ ) {
                     if ( (begin_index + j + shift_index) >= 0 && (begin_index + j + shift_index) < sac_npts ) {
-                        tmp1 = sign(amp[i][begin_index+j+shift_index])*pow(fabs(amp[i][begin_index+j+shift_index]),1./Nth_root)/count;
+                        tmp1 = amp[i][begin_index+j+shift_index]/count;
                         sum[j] += tmp1;
                         tmp[i][j] = tmp1;
                     }
@@ -196,10 +194,6 @@ int main( int argc, char *argv[] ) {
                         sum[j] += 0.; tmp[i][j] = 0.;
                     }
                 }
-            }
-            for ( j = 0; j < beam_npts; j ++ ) {
-                tmp2 = sign(sum[j])*pow(fabs(sum[j]),Nth_root);
-                sum[j] = tmp2;
             }
             for ( i = 0; i < count; i ++ ) {
                 cof += coef(sum, tmp[i], beam_npts)/count;
@@ -230,7 +224,7 @@ int main( int argc, char *argv[] ) {
 	}
 	fprintf(fp,"J=Pa6i\n");
 	fprintf(fp,"PS=%.3f-%.3f.ps\n", t1, t2); fprintf(fp,"PDF=%.3f-%.3f.pdf\n", t1, t2);
-	fprintf(fp,"awk '{print $1,$2,$3/%f}' %s > tmp.file\n", cof_peak, argv[11]);
+	fprintf(fp,"awk '{print $1,$2,$3/%f}' %s > tmp.file\n", cof_peak, argv[10]);
 	fprintf(fp,"gmt surface tmp.file -R$R1 -I%f/%f -Gtmp.grd\n", baz_step/10., slow_step/5.);
 	fprintf(fp,"gmt makecpt -Cjet -T%f/1/0.01 -Z >tmp.cpt\n", cof_low/cof_peak);
 	fprintf(fp,"gmt psxy -R$R2 -J$J -K -T>$PS\n");
