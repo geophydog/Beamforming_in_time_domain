@@ -147,7 +147,7 @@ int main( int argc, char *argv[] ) {
     while ( fgets(ss, size, fin) ) {
         no_spa(ss);
         fbp = fopen("bandpassfilter","w");
-        fprintf(fbp,"SAC_DISPLAY_COPYRIGHT=0\n");
+        fprintf(fbp,"${SAC_DISPLAY_COPYRIGHT}=0\n");
         fprintf(fbp,"sac<<END\n");
         fprintf(fbp,"r %s\n", ss);
         fprintf(fbp,"bp c %f %f n 4 p 2\n", fre_low, fre_high);
@@ -240,7 +240,7 @@ int main( int argc, char *argv[] ) {
 		grid -= grid_step;
 		fprintf(fp,"echo 0 %.3f %.3f | gmt pstext -R -J -K -O -F+f12p>>$PS\n", grid, grid);
 	}
-	fprintf(fp,"gmt psscale -Ctmp.cpt -D7i/3i/12/0.8 -Ba0.1g0:\"Normalized cross-coeffient\": -K -O >>$PS\n");
+	fprintf(fp,"gmt psscale -Ctmp.cpt -D7i/3i/12/0.8 -Bx0.1+l\"Normalized cross-coeffient\": -K -O >>$PS\n");
 	fprintf(fp,"echo 0 %f N | gmt pstext -R -J -K -O -F+f15p,27,red -Y1.9i>>$PS\n", slow_high/2.);
 	fprintf(fp,"echo 90 %f E | gmt pstext -R -J -K -O -F+f15p,27,red -X1.9i -Y-1.9i>>$PS\n", slow_high/2.);
 	fprintf(fp,"echo 180 %f S | gmt pstext -R -J -K -O -F+f15p,27,red -Y-1.9i -X-1.9i>>$PS\n", slow_high/2.);
