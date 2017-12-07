@@ -1,5 +1,5 @@
 # Beam-forming
-To constrain the back-azimuth and slowness of some seismic phase with seismic array
+- To constrain the back-azimuth and slowness of some seismic phase with seismic array
 # Dependencies
 -  SAC(Seismic Analysis Code, here version 101.6a)  
       - SAC is used to do bandpass filtering;
