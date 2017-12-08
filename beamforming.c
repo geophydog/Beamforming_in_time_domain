@@ -8,6 +8,8 @@
 +  slow_high:   high limitation of scaning hirizontal slowness         +
 +  slow_step:   step length of scaning slowness                        +
 +  baz_tesp:    step length of scaning backazimuth                     +
++            ATTENTION!!! Unit of slowness: seconds/degree             +
++                         Unit of back-azimuth: seconds/degree         +
 +  2017-5-11    Initially coded by Xuping Feng @ NJU                   +
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
