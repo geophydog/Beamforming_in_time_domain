@@ -231,7 +231,7 @@ int main( int argc, char *argv[] ) {
 	fprintf(fp,"gmt makecpt -Cjet -T%f/1/0.01 -Z >tmp.cpt\n", cof_low/cof_peak);
 	fprintf(fp,"gmt psxy -R$R2 -J$J -K -T>$PS\n");
 	fprintf(fp,"gmt grdimage tmp.grd -R -J -K -O -Ctmp.cpt -Bx30g15+l\"backazimuth(deg)\" -By%fg%f+l\"slowness(s/km)\" \
-		-BwsEN+t\"time: %.3f~%.3f sec & bp: %.3f~%.3f Hz\" >>$PS\n", slow_high/5., slow_high/10., t1, t2, fre_low, fre_high);
+		-BwsEN+t\"time: %.3f - %.3f sec & bp: %.3f - %.3f Hz\" >>$PS\n", slow_high/5., slow_high/10., t1, t2, fre_low, fre_high);
     fprintf(fp,"gmt psxy -R -J -K -O -W1p,white,\"..\" >>$PS<<EOF\n");
     for ( i = 0; i < 6; i ++ ) {
         fprintf(fp,">\n");
