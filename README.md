@@ -10,9 +10,9 @@
 # Usage
 - beamforming <sacfile.lst> <t1> <t2> <fre_low> <fre_high> <slow_low> <slow_high> <slow_step> <baz_step>  <output_file>
 
--NOTICE!!!
-- [x] Unit of slowness: second/degree;
-- [x] Unit of back-azimuth: degree.
+- NOTICE!!!
+      - [x] Unit of slowness: second/degree;
+      - [x] Unit of back-azimuth: degree.
 # Contribution
 -  Author: Xuping Feng
 - Email: geophydogvon@gmail.com
