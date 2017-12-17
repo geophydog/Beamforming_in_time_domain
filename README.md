@@ -1,6 +1,8 @@
 # Beam-forming
 - To constrain the back-azimuth and slowness of some seismic phase with seismic array
+![results](https://github.com/geophydog/Beamforming_in_time_domain/blob/master/images/Results.jpg)
 # Dependencies
+- Linux or Mac OS platform  
 -  SAC(Seismic Analysis Code, here version 101.6a)  
       - SAC is used to do bandpass filtering;
 -  GMT(the Generic Mapping Tools, here version 5.3.1)  
