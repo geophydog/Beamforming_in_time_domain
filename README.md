@@ -1,6 +1,15 @@
 :hotel:[Return to Home page](https://github.com/geophydog/geophydog.github.io)
 # Beam-forming
 - To constrain the back-azimuth and slowness of some seismic phase with seismic array
+
+***
+
+### Example
+- This is an example and necessary files in the diretory "Example" 
+![EXAMPLE](https://github.com/geophydog/Beamforming_in_time_domain/blob/master/images/630.000-700.000.png)
+
+***
+
 ![results](https://github.com/geophydog/Beamforming_in_time_domain/blob/master/images/Results.jpg)
 # Dependencies
 - Linux or Mac OS platform;  
