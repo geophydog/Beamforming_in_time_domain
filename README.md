@@ -15,6 +15,7 @@
 - Linux or Mac OS platform;  
 -  SAC(Seismic Analysis Code, here version 101.6a)  
       - SAC is used to do bandpass filtering;
+      - [Request for SAC](http://ds.iris.edu/ds/nodes/dmc/forms/sac/)
 -  GMT(the Generic Mapping Tools, here version 5.3.1)  
       - GMT is used to plot the results after executing beam-forming.
       - [Download GMT](http://gmt.soest.hawaii.edu/projects/gmt/wiki/Download)
