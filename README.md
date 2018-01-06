@@ -21,7 +21,8 @@
 # Installation
 - Just run "make" to compile and get the executable command "beamforming".
 # Usage
-- beamforming <sacfile.lst> <t1> <t2> <fre_low> <fre_high> <slow_low> <slow_high> <slow_step> <baz_step>  <output_file>
+- beamforming <sacfile.lst> <t1> <t2> <fre_low> <fre_high> <slow_low> <slow_high> <slow_step> <baz_step>  <output_file> 
+
 | parameter |  mean |
 | --------- | ----- |
 | sacfile.lst| file containing names of SAC format files |
