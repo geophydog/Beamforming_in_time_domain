@@ -17,6 +17,7 @@
       - SAC is used to do bandpass filtering;
 -  GMT(the Generic Mapping Tools, here version 5.3.1)  
       - GMT is used to plot the results after executing beam-forming.
+      - [Download GMT](http://gmt.soest.hawaii.edu/projects/gmt/wiki/Download)
 # Installation
 - Just run "make" to compile and get the executable command "beamforming".
 # Usage
