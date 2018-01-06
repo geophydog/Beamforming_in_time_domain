@@ -22,6 +22,18 @@
 - Just run "make" to compile and get the executable command "beamforming".
 # Usage
 - beamforming <sacfile.lst> <t1> <t2> <fre_low> <fre_high> <slow_low> <slow_high> <slow_step> <baz_step>  <output_file>
+| parameter |  mean |
+| --------- | ----- |
+| sacfile.lst| file containing names of SAC format files |
+|     t1     |     begin time of doing beam-forming      |
+|     t2     |     end time of doing beam-forming        |
+|  fre_low   |low limitation of corner frequency of SAC files |
+|  fre_high  |high limitation of corner frequency of SAC files |
+|  slow_low  |low limitation of scanning horizontal slowness or ray parameter|
+|  slow_high |high limitation of scanning horizontal slowness or ray parameter|
+|  slow_step | step length of scanning horizontal slowness or ray parameter|
+|  baz_step | step length of scanning back-azimuth |
+| output_file | file name of outputting results |
 
 - NOTICE!!!
 - [x] Unit of slowness: second/degree;
