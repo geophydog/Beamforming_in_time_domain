@@ -19,11 +19,11 @@ beamforming listfile 690 730 0.005 0.5 0 10 0.05 out.txt
 ### Example2
 #### Result1
 ```
-beamforming listfile 690 730 0.005 0.5 0 10 0.05 out.txt
+beamforming listfile 690 800 0.05 1 0 10 0.05 out.txt
 ```
 #### Result2
 ```
-beamforming listfile 690 730 0.005 0.5 0 10 0.05 out.txt
+beamforming listfile 1300 1500 0.05 1 0 15 0.05 out.txt
 ```
 ![results](https://github.com/geophydog/Beamforming_in_time_domain/blob/master/images/Results.jpg)
 # Dependencies
