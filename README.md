@@ -6,7 +6,13 @@
 
 ### Example
 - This is an example and necessary files in the diretory "Example" 
-![EXAMPLE](https://github.com/geophydog/Beamforming_in_time_domain/blob/master/images/630.000-700.000.png)
+#### :one: Waveforms
+[Waveform](https://github.com/geophydog/Beamforming_in_time_domain/blob/master/images/Waveforms.png)
+#### :two: Result
+```
+beamforming listfile 690 730 0.005 0.5 0 10 0.05 out.txt
+```
+![EXAMPLE](https://github.com/geophydog/Beamforming_in_time_domain/blob/master/images/BF-690-730-0.005-0.5.png)
 
 ***
 
