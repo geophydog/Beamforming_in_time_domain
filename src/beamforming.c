@@ -170,7 +170,7 @@ int main( int argc, char *argv[] ) {
 /*-------------------------------------------------------------------scaning slowness and backazimuth------------------------------------------------*/
     slow_scan = slow_low;
 
-    while ( slow_scan <= slow_high ) {
+    while ( slow_scan <= (slow_high+0.0001) ) {
         baz_scan = -10.;
         printf("Now scanning slowness %f deg/sec ...\n", slow_scan);
         while( baz_scan <= 370. ) {
