@@ -4,12 +4,27 @@
 
 ***
 
-### Example
+### Example1
 - This is an example and necessary files in the diretory "Example" 
-![EXAMPLE](https://github.com/geophydog/Beamforming_in_time_domain/blob/master/images/630.000-700.000.png)
+#### :one: Waveforms
+![Waveform](https://github.com/geophydog/Beamforming_in_time_domain/blob/master/images/Waveforms.png)
+#### :two: Result
+```
+beamforming listfile 690 730 0.005 0.5 0 10 0.05 out.txt
+```
+![EXAMPLE](https://github.com/geophydog/Beamforming_in_time_domain/blob/master/images/BF-690-730-0.005-0.5.png)
 
 ***
 
+### Example2
+#### Result1
+```
+beamforming listfile 690 800 0.05 1 0 10 0.05 out.txt
+```
+#### Result2
+```
+beamforming listfile 1300 1500 0.05 1 0 15 0.05 out.txt
+```
 ![results](https://github.com/geophydog/Beamforming_in_time_domain/blob/master/images/Results.jpg)
 # Dependencies
 - Linux or Mac OS platform;  
