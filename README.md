@@ -35,7 +35,7 @@ beamforming listfile 1300 1500 0.05 1 0 15 0.05 out.txt
       - GMT is used to plot the results after executing beam-forming.
       - [Download GMT](http://gmt.soest.hawaii.edu/projects/gmt/wiki/Download)
 # Installation
-- Just run "make" to compile and get the executable command "beamforming" .
+- Just run "make" to compile and get the executable command "beamforming" in "src" source code directory .
 # Usage
 - beamforming <sacfile.lst> <t1> <t2> <fre_low> <fre_high> <slow_low> <slow_high> <slow_step> <baz_step>  <output_file> 
 
