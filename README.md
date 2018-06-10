@@ -10,7 +10,7 @@
 ![Waveform](https://github.com/geophydog/Beamforming_in_time_domain/blob/master/images/Waveforms.png)
 #### :two: Result
 ```
-beamforming listfile 690 730 0.005 0.5 0 10 0.05 out.txt
+beamforming listfile 690 730 0.005 0.5 0 10 0.05 3 out.txt
 ```
 ![EXAMPLE](https://github.com/geophydog/Beamforming_in_time_domain/blob/master/images/BF-690-730-0.005-0.5.png)
 
