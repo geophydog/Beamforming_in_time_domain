@@ -54,7 +54,7 @@ beamforming sacfile.lst t1 t2 fre_low fre_high slow_low slow_high slow_step baz_
 |  baz_step | step length of scanning back-azimuth |
 | output_file | file name of outputting results |
 
-- NOTICE!!!
+# NOTICE!!!
 - [x] Unit of slowness: second/degree;
 - [x] Unit of back-azimuth: degree.
 # Contribution
