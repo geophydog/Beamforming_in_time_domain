@@ -9,7 +9,7 @@
 +  slow_step:   step length of scaning slowness                        +
 +  baz_tesp:    step length of scaning backazimuth                     +
 +            ATTENTION!!! Unit of slowness: seconds/degree             +
-+                         Unit of back-azimuth: seconds/degree         +
++                         Unit of back-azimuth: second/degree          +
 +  2017-5-11    Initially coded by Xuping Feng @ NJU                   +
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
@@ -172,7 +172,7 @@ int main( int argc, char *argv[] ) {
 
     while ( slow_scan <= (slow_high+0.0001) ) {
         baz_scan = -10.;
-        printf("Now scanning slowness %f deg/sec ...\n", slow_scan);
+        printf("Now scanning slowness %f s/deg ...\n", slow_scan);
         while( baz_scan <= 370. ) {
             for ( i = 0; i < beam_npts; i++ ) {
                 sum[i] = 0., cof = 0.;
