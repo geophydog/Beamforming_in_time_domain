@@ -1,4 +1,11 @@
 :hotel:[Return to Home page](https://github.com/geophydog/geophydog.github.io)
+
+***
+
+# NOTICE!!! THIS PROGRAM COMES WITH NO WARRANTY, TO THE EXTEND PERMITED BY LAW!
+
+***
+
 # Beam-forming
 - To constrain the back-azimuth and slowness of some seismic phase with seismic array
 
