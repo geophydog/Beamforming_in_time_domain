@@ -213,6 +213,7 @@ int main( int argc, char *argv[] ) {
 	grid_step = grid/10.;
 	fprintf(fp,"gmt gmtset FONT_LABEL 15p,5,black\n");
 	fprintf(fp,"gmt gmtset FONT_TITLE 20p,5,black\n");
+	fprintf(fp,"gmt gmtset FONT_ANNOT_PRIMARY 15p,5,black\n");
 	fprintf(fp,"gmt gmtset MAP_TITLE_OFFSET 40p\n");
 	fprintf(fp,"gmt gmtset MAP_GRID_PEN_PRIMARY 1p,white,\"..\"\n");
 	fprintf(fp,"gmt gmtset MAP_GRID_PEN_SECONDARY 1p,white,\"..\"\n");
