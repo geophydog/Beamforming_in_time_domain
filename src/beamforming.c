@@ -180,9 +180,10 @@ int main( int argc, char *argv[] ) {
                 for ( j = 0; j < beam_npts; j ++ )
                     tmp[i][j] = 0.;
             for ( i = 0; i < count; i ++ ) {
-                slow_x = slow_scan*cos( (90. - baz_scan)/180.*pi );
-                slow_y = slow_scan*sin( (90. - baz_scan)/180.*pi );
-	            dx = center_lon - coordi[i][0]; dy = center_lat - coordi[i][1];
+                slow_x = slow_scan*sin( (baz_scan-180.)/180.*pi );
+                slow_y = slow_scan*cos( (baz_scan-180.)/180.*pi );
+	            //dx = center_lon - coordi[i][0]; dy = center_lat - coordi[i][1];
+	            dx = coordi[i][0] - center_lon; dy = coordi[i][1] - center_lat;
                 shifttime = slow_x*dx + slow_y*dy;
                 shift_index = (int)(shifttime/delta);
                 for ( j = 0; j < beam_npts; j ++ ) {
@@ -241,7 +242,7 @@ int main( int argc, char *argv[] ) {
     fprintf(fp,"EOF\n");
 	while ( grid > (2.8*grid_step) ) {
 		grid -= grid_step;
-		fprintf(fp,"echo 0 %.3f %.3f | gmt pstext -R -J -K -O -F+f12p>>$PS\n", grid, grid);
+		fprintf(fp,"echo 0 %.3f %.3f | gmt pstext -R -J -K -O -F+f12p,green>>$PS\n", grid, grid);
 	}
 	fprintf(fp,"gmt psscale -Ctmp.cpt -D7i/3i/12/0.8 -Bx0.1+l\"Normalized cross-coefficient\" -K -O >>$PS\n");
 	fprintf(fp,"echo 0 %f N | gmt pstext -R -J -K -O -F+f15p,27,red -Y1.9i>>$PS\n", slow_high/2.);

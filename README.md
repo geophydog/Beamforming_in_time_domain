@@ -2,8 +2,7 @@
 
 ***
 
-# NOTICE!!! THIS PROGRAM COMES WITH NO WARRANTY, TO THE EXTEND PERMITED BY LAW!
-
+# NOTICE!!! THIS PROGRAM COMES WITH NO WARRANTY!!!
 ***
 
 # Beam-forming
@@ -11,27 +10,18 @@
 
 ***
 
-### Example1
+### Example
 - This is an example and necessary files in the diretory "Example" 
 #### :one: Waveforms
 ![Waveform](https://github.com/geophydog/Beamforming_in_time_domain/blob/master/images/Waveforms.png)
 #### :two: Result
 ```
-beamforming listfile 690 730 0.005 0.5 0 10 0.05 3 out.txt
+beamforming listfile 630 700 0.01 0.5 2 8 0.2 3 out.txt
 ```
-![EXAMPLE](https://github.com/geophydog/Beamforming_in_time_domain/blob/master/images/BF-690-730-0.005-0.5.png)
+![EXAMPLE](https://github.com/geophydog/Beamforming_in_time_domain/blob/master/images/630.000-700.000.png)
 
 ***
 
-### Example2
-#### Command1
-```
-beamforming listfile 690 800 0.05 1 0 10 0.05 3 out.txt
-```
-#### Command2
-```
-beamforming listfile 1300 1500 0.05 1 0 15 0.05 3 out.txt
-```
 ![results](https://github.com/geophydog/Beamforming_in_time_domain/blob/master/images/Results.jpg)
 # Dependencies
 - Linux or Mac OS platform;  
