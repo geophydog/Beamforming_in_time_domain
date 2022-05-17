@@ -17,11 +17,7 @@
 ```
 beamforming listfile 630 700 0.01 0.5 2 8 0.2 3 out.txt
 ```
-![EXAMPLE](https://github.com/geophydog/Beamforming_in_time_domain/blob/master/images/630.000-700.000.png)
 
-***
-
-![results](https://github.com/geophydog/Beamforming_in_time_domain/blob/master/images/Results.jpg)
 # Dependencies
 - Linux or Mac OS platform;  
 -  SAC(Seismic Analysis Code, here version 101.6a)  
