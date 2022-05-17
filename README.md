@@ -2,6 +2,7 @@
 ***
 
 ## I RECOMMEND THAT SOMEONE USE "F-K beamforming" in [fk-bf](https://github.com/geophydog/Beamforming_in_frequency_domain/) INSTEAD OF THIS ONE.
+`The new beamforming package can be found at https://github.com/geophydog/Beamforming_in_frequency_domain`
 ***
 
 ## Beam-forming
