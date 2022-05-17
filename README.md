@@ -1,10 +1,10 @@
-# NOTICE!!! THIS PROGRAM COMES WITH NO WARRANTY!!!
+## NOTICE!!! THIS PROGRAM COMES WITH NO WARRANTY!!!
 ***
 
-# I RECOMMEND THAT SOMEONE USE "F-K beamforming" in [fk-bf](https://github.com/geophydog/Beamforming_in_frequency_domain/)
+## I RECOMMEND THAT SOMEONE USE "F-K beamforming" in [fk-bf](https://github.com/geophydog/Beamforming_in_frequency_domain/) INSTEAD OF THIS ONE.
 ***
 
-# Beam-forming
+## Beam-forming
 - To constrain the back-azimuth and slowness of some seismic phase with seismic array
 
 ***
