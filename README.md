@@ -11,9 +11,7 @@
 
 ### Example
 - This is an example and necessary files in the diretory "Example" 
-#### :one: Waveforms
-![Waveform](https://github.com/geophydog/Beamforming_in_time_domain/blob/master/images/Waveforms.png)
-#### :two: Result
+
 ```
 beamforming listfile 630 700 0.01 0.5 2 8 0.2 3 out.txt
 ```
