@@ -1,8 +1,7 @@
-:hotel:[Return to Home page](https://github.com/geophydog/geophydog.github.io)
-
+# NOTICE!!! THIS PROGRAM COMES WITH NO WARRANTY!!!
 ***
 
-# NOTICE!!! THIS PROGRAM COMES WITH NO WARRANTY!!!
+# I RECOMMEND THAT SOMEONE USE "F-K beamforming" in ![fk-bf](https://github.com/geophydog/Beamforming_in_frequency_domain/)
 ***
 
 # Beam-forming
